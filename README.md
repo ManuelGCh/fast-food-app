@@ -8,6 +8,21 @@
 An iOS app to browse fast-food restaurants, look at their menus, build an order and send it to the
 restaurant by email.
 
+<table>
+  <tr>
+    <td align="center"><img src="docs/screens/restaurants.png" width="200" alt="Restaurant list with star ratings"></td>
+    <td align="center"><img src="docs/screens/restaurant.png" width="200" alt="Restaurant detail with logo, description and phone"></td>
+    <td align="center"><img src="docs/screens/menu.png" width="200" alt="Menu with prices and ratings"></td>
+    <td align="center"><img src="docs/screens/order.png" width="200" alt="Current order with quantities and price"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Restaurants</sub></td>
+    <td align="center"><sub>Restaurant detail</sub></td>
+    <td align="center"><sub>Menu</sub></td>
+    <td align="center"><sub>Current order</sub></td>
+  </tr>
+</table>
+
 Built in 2019 as a university project: it starts from Apple's *FoodTracker* tutorial and grows into a
 small restaurant + ordering flow with its own data model, local persistence and email checkout.
 
