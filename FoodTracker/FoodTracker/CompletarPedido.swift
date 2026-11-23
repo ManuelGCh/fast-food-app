@@ -94,7 +94,9 @@ class CompletarPedido: UIViewController, MFMailComposeViewControllerDelegate{
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self
-        mailComposerVC.setToRecipients(["jsanore98@gmail.com"])
+        if let destinatario = CorreoTextField.text, !destinatario.isEmpty {
+            mailComposerVC.setToRecipients([destinatario])
+        }
         mailComposerVC.setSubject("Enviando un email de confirmación.....")
         mailComposerVC.setMessageBody("¡Mensaje enviado!", isHTML: false)
         
