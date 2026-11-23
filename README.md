@@ -1,60 +1,77 @@
-# Fast Food App (iOS, Swift)
+# Fast Food App
 
-An iOS prototype of a food-delivery app: browse a menu, build an order and check out — the kind of
-flow you expect from Glovo, Just Eat or Uber Eats, rebuilt as a learning project in Swift.
+![Swift](https://img.shields.io/badge/Swift_3.0-F05138?style=flat-square&logo=swift&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS_10+-000000?style=flat-square&logo=apple&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+![Status](https://img.shields.io/badge/status-learning_project-blue?style=flat-square)
 
-<!-- TODO: this repo currently contains only a ZIP. Extract it (see SETUP.md) and then:
-     1. Add 2-3 screenshots below — it is the fastest way to make this repo credible.
-     2. Replace the feature list with what the app actually does. -->
+An iOS app to browse fast-food restaurants, look at their menus, build an order and send it to the
+restaurant by email.
 
-| Menu | Item detail | Cart |
-| :---: | :---: | :---: |
-| ![Menu](docs/screenshot-menu.png) | ![Item](docs/screenshot-item.png) | ![Cart](docs/screenshot-cart.png) |
+Built in 2019 as a university project: it starts from Apple's *FoodTracker* tutorial and grows into a
+small restaurant + ordering flow with its own data model, local persistence and email checkout.
 
-## Features
+## Screens and design docs
 
-- Menu browsing by category, with prices and item detail
-- Cart with quantities and running total
-- Order confirmation flow
-- <!-- TODO: confirm the rest: search? favourites? order history? mock checkout? -->
-- Custom UI built with Auto Layout, no third-party UI framework
+The repository contains the original design documentation, which is the fastest way to see the app
+without building it:
+
+| Document | What it shows |
+| :--- | :--- |
+| [Manual de usuario](docs/Manual%20de%20usuario.pdf) | Every screen, step by step, with screenshots |
+| [Estructura APP](docs/Estructura%20APP.pdf) | Architecture and data model |
+| [Storyboard APP](docs/StoryboardAPP.pdf) | Storyboard and navigation flow |
+
+## What it does
+
+- **Restaurants** — list with photo, name, address, phone, email, description and a star rating
+- **Menus** — each restaurant has its own dishes with photo, price and description; dishes can be added, edited and deleted
+- **Orders** — add dishes with quantity and notes, see the running total
+- **Checkout** — customer name, phone, address and email, plus the order summary, sent through the
+  system mail composer (`MFMailComposeViewController`)
+- **Persistence** — restaurants and orders are archived locally with `NSCoding`; there is no backend
 
 ## Architecture
 
-<!-- TODO: keep whichever applies, delete the rest -->
-
-- **Pattern:** MVC
-- **Persistence:** in-memory / `UserDefaults` / Core Data
-- **Networking:** mocked locally, no real backend
-- **Screens:** storyboard-based, one `UIViewController` per flow
+Classic MVC with storyboards, one view controller per screen:
 
 ```
-FastFoodApp/
-├── Models/          # MenuItem, Order, Cart
-├── Views/           # Cells and reusable views
-├── Controllers/     # One per screen
-└── Resources/       # Assets, fonts, local JSON
+FoodTracker/
+├── Restaurante.swift          # restaurant model: contact data, rating, menu
+├── Meal.swift                 # dish model
+├── pedido.swift               # order line: dish, units, notes, price
+├── RestauranteTableViewController.swift
+├── MealTableViewController.swift
+├── PedidoViewController.swift
+├── CompletarPedido.swift      # checkout + email
+├── RatingControl.swift        # custom star-rating control
+└── Assets.xcassets
 ```
+
+Models implement `NSCoding` and are written to the app's `Documents` directory, so data survives
+between launches. Screens pass state through `prepare(for:sender:)`, and the same controllers handle
+both "add" and "edit" flows through an optional model property.
 
 ## Running it
 
-1. Open `FastFoodApp.xcodeproj` in Xcode 12+ (or the version noted below)
-2. Select an iPhone simulator
-3. `⌘R`
+```bash
+open FoodTracker/FoodTracker.xcodeproj
+```
 
-<!-- TODO: state the Xcode / iOS version it was built against, e.g. "Built and tested with Xcode 11 / iOS 13". -->
+Select an iPhone simulator and press `⌘R`.
 
-## Stack
-
-`Swift` · `UIKit` · `Xcode` · `Auto Layout`
+> The project targets **Swift 3.0 / iOS 10 (Xcode 8)**. A current Xcode will ask to migrate the
+> project and the Swift syntax before it builds — expected for a 2019 codebase.
 
 ## What I learned
 
-- Structuring a multi-screen app around a real user flow instead of isolated demos
-- Building a reusable menu/cart model that survives navigation
-- Custom table/collection view cells and layout constraints
-- Judging when a mock backend is enough to validate the UX
+- Turning a tutorial into a real domain model instead of adding screens on top of it
+- Passing state between screens without a global singleton
+- Local persistence with `NSCoding` when a backend is overkill
+- Integrating a system framework (Mail) and handling its completion callbacks
 
-## License
+## Credits and license
 
-MIT — see [LICENSE](LICENSE).
+The starting point is Apple's *FoodTracker* sample code; its original license is kept in
+[`docs/THIRD-PARTY-LICENSES.txt`](docs/THIRD-PARTY-LICENSES.txt). Everything added on top
+(restaurants, menus, orders, checkout) is MIT licensed — see [LICENSE](LICENSE).
